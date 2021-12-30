@@ -2,6 +2,7 @@ import React , {useState, useEffect} from 'react';
 import {pattern} from './pattern'
 import './App.css'
 import { Square } from './Component/Square';
+import Button from './Component/Button';
 
 
 export default function App(){
@@ -10,7 +11,7 @@ export default function App(){
     const [boardValues, setBoardValue] = useState(["", "", "","", "","","","",""])
     const [playerValue, setPlayerValue] = useState("O")
     const [result, setResult] = useState({player: "", state: ""})
-
+    const [showButton, setShowButton] = useState(true)
 
 
     const checkResult = ()=>{
@@ -27,15 +28,30 @@ export default function App(){
             if(winCheck) {
                 return setResult({player: playerValue, state: "Won"})}
         })
+        
+    }
+
+
+    const checkTie=()=>{
+        let tie = true
+        boardValues.forEach(val=>{
+            if (val === ""){
+                tie = false
+            }
+        })
+             if(tie){
+                setResult({player: "No one Win", state: "Tie"})
+             }
     }
 
     useEffect(()=>{
+        checkTie()
         checkResult() 
         playerValue==="X"? setPlayerValue("O") : setPlayerValue("X") 
     }, [boardValues])
 
     useEffect(()=>{
-        if (result.state === "Won"){
+        if (result.state !== ""){
             alert(`player ${result.player} : ${result.state}`)
             restart()
         }
@@ -43,9 +59,11 @@ export default function App(){
 
     const restart =()=>{
         setBoardValue(["", "", "","", "","","","",""])
+        setShowButton(true)
     }
 
     const chooseBox = (boxNum)=>{
+        setShowButton(false)
         if (boardValues[boxNum] !== "") return
         setBoardValue(boardValues.map((val,ind)=>{
             if(ind === boxNum && val === ""){
@@ -57,6 +75,10 @@ export default function App(){
         )
     }
 
+    const selectButton = (sign)=>{
+        setPlayerValue(sign)
+        setShowButton(false)
+    }
 
 
     
@@ -64,6 +86,11 @@ export default function App(){
         <div className='mainContainer'>
             <div className='board'>
                 <h1 className='title'>TIC TAC TOE</h1>
+                {showButton && <div  className='buttonGroup'>
+                    <p className='choose'>Choose: </p>
+                    <Button value={"X"} selectButton={()=>selectButton("X")}/>
+                    <Button value={"O"} selectButton={()=>selectButton("O")}/>
+                </div>}
                 <div className='squareBox'>
                     <Square mark={boardValues[0]} chooseBox={()=>{chooseBox(0)}}/>
                     <Square mark={boardValues[1]} chooseBox={()=>{chooseBox(1)}}/>

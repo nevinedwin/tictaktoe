@@ -46,4 +46,17 @@ body{
     align-content: flex-start;
 }
 
+.buttonGroup{
+    display: flex;
+    align-items: center;
+    gap: 3px;
+   align-self: flex-end;
+   margin-right: 50px;
+}
+.choose{
+    margin: 0;
+    font-size: 15px; 
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
 
