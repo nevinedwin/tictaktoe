@@ -9,9 +9,10 @@ export default function App(){
 
 
     const [boardValues, setBoardValue] = useState(["", "", "","", "","","","",""])
-    const [playerValue, setPlayerValue] = useState("O")
+    const [playerValue, setPlayerValue] = useState({currval: "O", ownVal : ""})
     const [result, setResult] = useState({player: "", state: ""})
     const [showButton, setShowButton] = useState(true)
+
 
 
     const checkResult = ()=>{
@@ -25,9 +26,13 @@ export default function App(){
                     winCheck = false
                 } 
             })
-            if(winCheck) {
-                return setResult({player: playerValue, state: "Won"})}
-        })
+            if(winCheck){
+                if(playerValue.currval === playerValue.ownVal){    
+                    return setResult({player: "You", state: "Won"})
+                }else{
+                    return setResult({player: playerValue.currval, state: "Won"})
+                }}
+            })
         
     }
 
@@ -47,12 +52,12 @@ export default function App(){
     useEffect(()=>{
         checkTie()
         checkResult() 
-        playerValue==="X"? setPlayerValue("O") : setPlayerValue("X") 
+        playerValue.currval==="X"? setPlayerValue({currval: "O", ownVal : ""}) : setPlayerValue({currval: "X", ownVal : ""}) 
     }, [boardValues])
 
     useEffect(()=>{
         if (result.state !== ""){
-            alert(`player ${result.player} : ${result.state}`)
+            alert(` ${result.player} : ${result.state}`)
             restart()
         }
     }, [result]) 
@@ -67,7 +72,7 @@ export default function App(){
         if (boardValues[boxNum] !== "") return
         setBoardValue(boardValues.map((val,ind)=>{
             if(ind === boxNum && val === ""){
-                return playerValue
+                return playerValue.currval
             }else{
                 return val
             }
@@ -76,7 +81,7 @@ export default function App(){
     }
 
     const selectButton = (sign)=>{
-        setPlayerValue(sign)
+        setPlayerValue({currval: sign, ownVal : sign})
         setShowButton(false)
     }
 
