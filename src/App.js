@@ -9,7 +9,7 @@ export default function App(){
 
 
     const [boardValues, setBoardValue] = useState(["", "", "","", "","","","",""])
-    const [playerValue, setPlayerValue] = useState({currval: "O", ownVal : ""})
+    const [playerValue, setPlayerValue] = useState({currval: "O", ownval : ""})
     const [result, setResult] = useState({player: "", state: ""})
     const [showButton, setShowButton] = useState(true)
 
@@ -27,6 +27,7 @@ export default function App(){
                 } 
             })
             if(winCheck){
+                console.log(playerValue)
                 if(playerValue.currval === playerValue.ownVal){    
                     return setResult({player: "You", state: "Won"})
                 }else{
@@ -52,7 +53,7 @@ export default function App(){
     useEffect(()=>{
         checkTie()
         checkResult() 
-        playerValue.currval==="X"? setPlayerValue({currval: "O", ownVal : ""}) : setPlayerValue({currval: "X", ownVal : ""}) 
+        playerValue.currval==="X"? setPlayerValue(prev=>({currval: "O", ownval : prev.ownval})) : setPlayerValue(prev=>({currval: "X", ownval : prev.ownval})) 
     }, [boardValues])
 
     useEffect(()=>{
@@ -65,6 +66,7 @@ export default function App(){
     const restart =()=>{
         setBoardValue(["", "", "","", "","","","",""])
         setShowButton(true)
+        setPlayerValue({currval: "O", ownval : ""})
     }
 
     const chooseBox = (boxNum)=>{
@@ -81,7 +83,7 @@ export default function App(){
     }
 
     const selectButton = (sign)=>{
-        setPlayerValue({currval: sign, ownVal : sign})
+        setPlayerValue({currval: sign, ownval : sign})
         setShowButton(false)
     }
 
